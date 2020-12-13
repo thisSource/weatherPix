@@ -1,0 +1,23 @@
+body {
+    margin: 0px ;
+    margin-bottom: 0px;
+}
+
+#wrapper{
+    position:relative;
+   
+}
+#skyCanvas1, #cityCanvas{
+    position:absolute; top:0px; left:0px;
+  
+}
+
+#textOverlay {
+    position: absolute; 
+    z-index: 1; 
+    left: 50px;
+     top: 20px;
+      width:100px;
+       height:20px;
+       color: whitesmoke;
+}
