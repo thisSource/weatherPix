@@ -1,1 +1,1 @@
-# weatherPix beowser weather app in progress
+# weatherPix browser weather app in progress
