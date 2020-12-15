@@ -7,7 +7,7 @@ body {
     position:relative;
    
 }
-#skyCanvas1, #cityCanvas{
+#skyCanvas1, #cityCanvas, #weather{
     position:absolute; top:0px; left:0px;
   
 }
