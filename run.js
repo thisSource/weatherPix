@@ -63,6 +63,15 @@ let cityHeight = optHeight * relHeight;
 cityCanvas.width = cityWidth;
 cityCanvas.height = cityHeight;
 
+//CITY DARK MASK
+let cityBlackCanvas = document.getElementById("cityCanvasBlack");
+let cityBlackCtx = cityBlackCanvas.getContext("2d");
+let cityBlackWidth = optWidth * relWidth;
+let cityBlackHeight = optHeight * relHeight;
+cityBlackCanvas.width = cityBlackWidth;
+cityBlackCanvas.height = cityBlackHeight;
+
+
 //WEATHER DOM
 let weatherCanvas = document.getElementById("weather");
 let weatherCtx = weatherCanvas.getContext("2d");
@@ -85,7 +94,7 @@ if (window.innerWidth > 601) {
 //WEATHER & TIME API // GET DATA
 //----------------------------------------------------------------------------------------------------------//
 let apiKeyWeather = "ef834ba6b77d78c6f0324aee2e241488";
-const locationInput = "Karlshamn";
+const locationInput = "Stockholm";
 const locationCountryInput = "Sweden";
 
 let currentWeatherURL =
@@ -192,7 +201,7 @@ const currentTimeData =
   let currentHour = currentTimeSplit[0];
   let currentMinutes = currentTimeSplit[1];
   //let currentTimeInMinutes = Number(currentHour) * 60 + Number(currentMinutes);
-  let currentTimeInMinutes = 720;
+  let currentTimeInMinutes = 700;
 
   console.log(
     "current month: " + currentMonth,
@@ -219,10 +228,13 @@ const currentTimeData =
   //Load city elements
 
   const cityImage = new Image();
+  const cityBlackImage = new Image();
   const windows = new Image();
 
-  if (locationInput === "Karlshamn") {
+
+  if (locationInput === "Stockholm") {
     cityImage.src = "PlaceHolderImagesv1/cityStockholm.png";
+    cityBlackImage.src ="PlaceHolderImagesv1/cityStockholmBlack.png"
     windows.src = "PlaceHolderImagesv1/windows.png";
   }
 
@@ -232,43 +244,42 @@ const currentTimeData =
   //SETUP
   //----------------------------------------------------------------------------------------------------------//
  // RUN WEATHER
+ 
      
- cloudWhiteA.addEventListener("load", () => {
-  placeHolderSun()
-  placeHolderClouds();
+ //RUN CITY
+ cityImage.addEventListener("load", () => {
+  
+});
+ //RUN CITY
+ cityBlackImage.addEventListener("load", () => {
  
 });
 
-
- sunA.addEventListener("load", () => {
-  
-})
-
-
-     
   //RUN SKY
   skyImage.addEventListener("load", () => {
-    runSky();
+    
   });
 
-  //RUN CITY
-  cityImage.addEventListener("load", () => {
-    runCity();
-  });
 
  
-
+  let cloudPosX = 100;
+  let cloudSpeedX = 0.5;
   
-
   //----------------------------------------------------------------------------------------------------------//
   //UPDATE / DRAW / ANIMATE
   //----------------------------------------------------------------------------------------------------------//
-  // function update (){
-  //     requestAnimationFrame(update)
-  // }
-  //update();
+  (function update (){
+    weatherCtx.clearRect(0,0,window.innerWidth, window.innerHeight);
+    runSky();
+    cityDraw();
+    cityBlackDraw ()  
+    placeHolderSun()
+    placeHolderClouds();
+    
+      requestAnimationFrame(update)
+  })();
 
-
+  
 
   //----------------------------------------------------------------------------------------------------------//
   // FUNCTION COLLECTION
@@ -318,14 +329,11 @@ const currentTimeData =
   //----------------------------------------------------------------------------------------------------------//
 
   //RUN CITY FUNCTIONS
-  function runCity() {
-    cityDraw();
-  }
 
   
 
   //DRAW CITY
-  let cityDraw = () => {
+  function cityDraw () {
     let cityBrightness;
 
     cityCtx.drawImage(
@@ -352,22 +360,57 @@ const currentTimeData =
 
     // MAINPULATE SKY COLOR HERE
     for (let i = 0; i < scannedData.length; i += 4) {
-      scannedData[i + 0] = scannedData[i + 0] - cityBrightness;
-      scannedData[i + 1] = scannedData[i + 1] - cityBrightness;
-      scannedData[i + 2] = scannedData[i + 2] - cityBrightness;
+      scannedData[i + 0] = scannedData[i + 0];
+      scannedData[i + 1] = scannedData[i + 1];
+      scannedData[i + 2] = scannedData[i + 2];
       scannedData[i + 3] = scannedData[i + 3];
     }
     scannedImage.data = scannedData;
     cityCtx.putImageData(scannedImage, 0, 0);
   };
 
+  function cityBlackDraw () {
+    let cityBlackAlpha;
+
+    cityBlackCtx.drawImage(
+      cityBlackImage,
+      cityBlackImage.naturalWidth * croptWidthStart,
+      0,
+      cityBlackImage.naturalWidth * croptWidthEnd,
+      cityBlackImage.naturalHeight,
+      0,
+      cityBlackHeight - 600 * relHeight,
+      cityBlackWidth,
+      cityBlackHeight - 100 * relHeight
+    );
+
+    const scannedImageBlack = cityBlackCtx.getImageData(0, 0, cityBlackWidth, cityBlackHeight);
+    const scannedDataBlack = scannedImageBlack.data;
+    // MAP RGB TO TIME
+    if (currentTimeInMinutes <= 719) {
+      cityBlackAlpha = mapTo(currentTimeInMinutes, 0, 719, 0, 255);
+    }
+    if (currentTimeInMinutes > 719) {
+      cityBlackAlpha = mapTo(currentTimeInMinutes, 719, 1440, 255, 0);
+    }
+console.log(cityBlackAlpha)
+    // MAINPULATE SKY COLOR HERE
+    for (let i = 0; i < scannedDataBlack.length; i += 4) {
+      scannedDataBlack[i + 0] = scannedDataBlack[i + 0];
+      scannedDataBlack[i + 1] = scannedDataBlack[i + 1];
+      scannedDataBlack[i + 2] = scannedDataBlack[i + 2];
+      scannedDataBlack[i + 3] = scannedDataBlack[i + 3] - cityBlackAlpha;
+    }
+    scannedImageBlack.data = scannedDataBlack;
+    cityBlackCtx.putImageData(scannedImageBlack, 0, 0);
+  };
 
   //----------------------------------------------------------------------------------------------------------//
   // WEATHER FUNCTIONS
   //----------------------------------------------------------------------------------------------------------//
   function placeHolderSun(){
     weatherCtx.drawImage(
-      sunA, 100,150,200,200
+      sunA, 100,150,100,100
       // cloudWhiteA,
       // cloudWhiteA.naturalWidth * croptWidthStart,
       // 0,
@@ -379,15 +422,18 @@ const currentTimeData =
       // weatherHeight - 100 * relHeight
     );
   }
-  
-  
 
+  
+  
 function placeHolderClouds () {
 
   let cloudBrightness;
 
+
+  cloudPosX = cloudPosX + cloudSpeedX;
+
   weatherCtx.drawImage(
-    cloudWhiteA, 200,100,300,200
+    cloudWhiteA, cloudPosX,100,300,200
     // cloudWhiteA,
     // cloudWhiteA.naturalWidth * croptWidthStart,
     // 0,
@@ -400,18 +446,6 @@ function placeHolderClouds () {
   );
 
 
-  weatherCtx.drawImage(
-    cloudWhiteA, 1000,100,200,150
-    // cloudWhiteA,
-    // cloudWhiteA.naturalWidth * croptWidthStart,
-    // 0,
-    // cloudWhiteA.naturalWidth * croptWidthEnd,
-    // cloudWhiteA.naturalHeight,
-    // 0,
-    // weatherHeight - 100 * relHeight,
-    // weatherWidth,
-    // weatherHeight - 100 * relHeight
-  );
 
   const scannedImage = weatherCtx.getImageData(0, 0, cityWidth, cityHeight);
   const scannedData = scannedImage.data;
@@ -425,14 +459,15 @@ function placeHolderClouds () {
 
   // MAINPULATE SKY COLOR HERE
   for (let i = 0; i < scannedData.length; i += 4) {
-    scannedData[i + 0] = scannedData[i + 0] - cloudBrightness;
-    scannedData[i + 1] = scannedData[i + 1] - cloudBrightness;
-    scannedData[i + 2] = scannedData[i + 2] - cloudBrightness;
+    scannedData[i + 0] = scannedData[i + 0];
+    scannedData[i + 1] = scannedData[i + 1];
+    scannedData[i + 2] = scannedData[i + 2];
     scannedData[i + 3] = scannedData[i + 3];
   }
   scannedImage.data = scannedData;
   weatherCtx.putImageData(scannedImage, 0, 0);
 };
+
 
 
 })(); //LAST LINE OF WEATHER AND TIME SYSTEM
