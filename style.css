@@ -7,10 +7,10 @@ body {
     position:relative;
    
 }
-#skyCanvas1, #cityCanvas, #cityCanvasBlack, #weather{
+#skyCanvas1, #weather, #cityCanvas, #cityCanvasBlack, #cityCanvasMain {
     position:absolute; top:0px; left:0px;
-  
 }
+
 
 #textOverlay {
     position: absolute; 
