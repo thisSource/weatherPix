@@ -80,7 +80,7 @@ cityCanvas2.width = cityWidth;
 cityCanvas2.height = cityHeight;
 
 //SUN AND MOON CANVAS
-let sunAndMoonCanvas = document.getElementById("sunAndMoonCanvas")
+let sunAndMoonCanvas = document.getElementById("sunAndMoonCanvas");
 let sunAndMoonCtx = sunAndMoonCanvas.getContext("2d");
 let sunAndMoonWidth = optWidth * relWidth;
 let sunAndMoonHeight = optHeight * relHeight;
@@ -202,16 +202,24 @@ const currentTimeData =
   let jsonCurrenTimeandDate = await currentTimeandDate.json();
   //Current date reuslt
   //Current month
+  let currentYear = jsonCurrenTimeandDate.year;
   let currentMonth = jsonCurrenTimeandDate.month;
+  let currentDate = jsonCurrenTimeandDate.date.split("-");
+  let currentDay = Number(currentDate[2]);
+
   let currentTime = jsonCurrenTimeandDate.time_24;
   let currentTimeSplit = currentTime.split(":");
   let currentHour = currentTimeSplit[0];
   let currentMinutes = currentTimeSplit[1];
+  let lengthOfDay = currentSunSetTimeInMinutes - currentSunRiseTimeInMinutes;
+
   let currentTimeInMinutes = Number(currentHour) * 60 + Number(currentMinutes);
-  //let currentTimeInMinutes = 1000;
+  //let currentTimeInMinutes = 525;
 
   console.log(
+    "current year " + currentYear,
     "current month: " + currentMonth,
+    // "current day " + currentDay,
     "current local time: " + currentTime,
     "current hour: " + currentHour,
     "current miuntes: " + currentMinutes,
@@ -248,72 +256,9 @@ const currentTimeData =
   const sunA = new Image();
   sunA.src = "PlaceHolderImagesv1/sun.png";
 
-  const moonA = new Image();
-  moonA.src = "PlaceHolderImagesv1/MoonImages/quarterToFull.png"
-
   //----------------------------------------------------------------------------------------------------------//
   // WEATHER, DAY AND NIGHT CYCLE, SKY, SEASON IMPLEMENTATION SECTION
   //----------------------------------------------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------------------------------------------//
-  // DAY AND NIGHT CYCLES
-  //----------------------------------------------------------------------------------------------------------//
-  console.log(currentTimeInMinutes)
-  function sunAndMoon(){
- // SUNSET AND SUNRISE
- if (currentTimeInMinutes > currentSunRiseTimeInMinutes && currentTimeInMinutes < currentSunSetTimeInMinutes) {
-  runSun();
-} else { runMoon(); }
-
-
-
-}
- 
-  // SUN CYCLE
-    //----------------------------------------------------------------------------------------------------------//
-function runSun(){
-
-  sunAndMoonCtx.drawImage(
-      sunA,
-      100*relWidth,
-      150*relHeight,
-      100*relWidth,
-      100*relHeight
-      // cloudWhiteA,
-      // cloudWhiteA.naturalWidth * croptWidthStart,
-      // 0,
-      // cloudWhiteA.naturalWidth * croptWidthEnd,
-      // cloudWhiteA.naturalHeight,
-      // 0,
-      // weatherHeight - 100 * relHeight,
-      // weatherWidth,
-      // weatherHeight - 100 * relHeight
-    );
-}
-
-// MOON CYCLE
-    //----------------------------------------------------------------------------------------------------------//
-    function runMoon(){
-
-      sunAndMoonCtx.drawImage(
-        moonA,
-        100*relWidth,
-        150*relHeight,
-        100*relWidth,
-        100*relHeight
-        // cloudWhiteA,
-        // cloudWhiteA.naturalWidth * croptWidthStart,
-        // 0,
-        // cloudWhiteA.naturalWidth * croptWidthEnd,
-        // cloudWhiteA.naturalHeight,
-        // 0,
-        // weatherHeight - 100 * relHeight,
-        // weatherWidth,
-        // weatherHeight - 100 * relHeight
-      );
-  }
-
-
   // MOON CYCLE FUNCTION
   //----------------------------------------------------------------------------------------------------------//
   function getMoonPhase(year, month, day) {
@@ -346,9 +291,126 @@ function runSun(){
 
     return totalDaysInelapseInteger;
   }
+  let currentMoonPhase = getMoonPhase(currentYear, currentMonth, currentDay);
 
-  let currentMoonPhase = getMoonPhase(2020, 12, 20);
+  const moonA = new Image();
+  if (currentMoonPhase < 3) {
+    moonA.src = "PlaceHolderImagesv1/MoonImages/quarterToFull.png";
+  }
+  if (currentMoonPhase < 5 && currentMoonPhase > 2) {
+    moonA.src = "PlaceHolderImagesv1/MoonImages/eigthToFull.png";
+  }
+  if (currentMoonPhase === 4) {
+    moonA.src = "PlaceHolderImagesv1/MoonImages/fullMoon.png";
+  }
 
+  if (currentMoonPhase === 5) {
+    moonA.src = "PlaceHolderImagesv1/MoonImages/eightFromFull.png";
+  }
+  if (currentMoonPhase < 8 && currentMoonPhase > 5) {
+    moonA.src = "PlaceHolderImagesv1/MoonImages/quarterFromFull.png";
+  }
+
+  //----------------------------------------------------------------------------------------------------------//
+  // DAY AND NIGHT CYCLES
+  //----------------------------------------------------------------------------------------------------------//
+  function sunAndMoon() {
+    // SUNSET AND SUNRISE
+    if (
+      currentTimeInMinutes > currentSunRiseTimeInMinutes &&
+      currentTimeInMinutes < currentSunSetTimeInMinutes
+    ) {
+      runSun();
+    } else {
+      runMoon();
+    }
+  }
+
+  // SUN CYCLE
+  //----------------------------------------------------------------------------------------------------------//
+
+  // SET SUN POSITION
+  let sunYPos;
+  let sunXPos = mapTo(
+    currentTimeInMinutes,
+    0 + currentSunRiseTimeInMinutes,
+    0 + currentSunRiseTimeInMinutes + lengthOfDay,
+    0,
+    window.innerWidth
+  );
+  if (currentTimeInMinutes < 720) {
+    sunYPos = mapTo(
+      currentTimeInMinutes,
+      0 + currentSunRiseTimeInMinutes,
+      0 + currentSunRiseTimeInMinutes + lengthOfDay / 2,
+      window.innerHeight / 2,
+      window.innerHeight / 6
+    );
+  } else {
+    sunYPos = mapTo(
+      currentTimeInMinutes,
+      0 + currentSunRiseTimeInMinutes + lengthOfDay / 2,
+      0 + currentSunRiseTimeInMinutes + lengthOfDay,
+      window.innerHeight / 6,
+      window.innerHeight / 2
+    );
+  }
+  function runSun() {
+    sunAndMoonCtx.drawImage(
+      sunA,
+      sunXPos * relWidth,
+      sunYPos * relHeight,
+      100,
+      100
+    );
+  }
+
+  // MOON CYCLE
+  //----------------------------------------------------------------------------------------------------------//
+// SET SUN POSITION
+let moonYPos;
+let moonXPos;
+if(currentTimeInMinutes < currentSunRiseTimeInMinutes){
+  moonXPos = mapTo(
+    currentTimeInMinutes,
+    0,
+    currentSunRiseTimeInMinutes,
+    0,
+    window.innerWidth/2)}
+  else{ moonXPos = mapTo(
+    currentTimeInMinutes,
+    currentSunSetTimeInMinutes,
+    1440,
+    window.innerWidth/2,
+    window.innerWidth) }
+
+
+if (currentTimeInMinutes < 720) {
+  sunYPos = mapTo(
+    currentTimeInMinutes,
+    0 + currentSunRiseTimeInMinutes,
+    0 + currentSunRiseTimeInMinutes + lengthOfDay / 2,
+    window.innerHeight / 2,
+    window.innerHeight / 6
+  );
+} else {
+  sunYPos = mapTo(
+    currentTimeInMinutes,
+    0 + currentSunRiseTimeInMinutes + lengthOfDay / 2,
+    0 + currentSunRiseTimeInMinutes + lengthOfDay,
+    window.innerHeight / 6,
+    window.innerHeight / 2
+  );
+}
+  function runMoon() {
+    sunAndMoonCtx.drawImage(
+      moonA,
+      moonXPos,
+      150,
+      100,
+      100
+    );
+  }
 
   //----------------------------------------------------------------------------------------------------------//
   //SKY
@@ -371,10 +433,22 @@ function runSun(){
 
     // MAP RGB TO TIME
     if (currentTimeInMinutes <= 719) {
-      skyBrightness = mapTo(currentTimeInMinutes, currentSunRiseTimeInMinutes, 719, 120, 0);
+      skyBrightness = mapTo(
+        currentTimeInMinutes,
+        currentSunRiseTimeInMinutes,
+        719,
+        120,
+        0
+      );
     }
     if (currentTimeInMinutes > 719) {
-      skyBrightness = mapTo(currentTimeInMinutes, 719, currentSunSetTimeInMinutes, 0, 120);
+      skyBrightness = mapTo(
+        currentTimeInMinutes,
+        719,
+        currentSunSetTimeInMinutes,
+        0,
+        120
+      );
     }
 
     // MAINPULATE SKY COLOR HERE
@@ -411,8 +485,6 @@ function runSun(){
   let cityBlackAlpha;
 
   function cityBlackDraw() {
-    
-
     cityBlackCtx.drawImage(
       cityBlackImage,
       cityBlackImage.naturalWidth * croptWidthStart,
@@ -434,10 +506,22 @@ function runSun(){
     const scannedDataBlack = scannedImageBlack.data;
     // MAP RGB TO TIME
     if (currentTimeInMinutes <= currentSunRiseTimeInMinutes) {
-      cityBlackAlpha = mapTo(currentTimeInMinutes, 0, currentSunRiseTimeInMinutes, 0, 120);
+      cityBlackAlpha = mapTo(
+        currentTimeInMinutes,
+        0,
+        currentSunRiseTimeInMinutes,
+        0,
+        120
+      );
     }
     if (currentTimeInMinutes > currentSunSetTimeInMinutes) {
-      cityBlackAlpha = mapTo(currentTimeInMinutes, currentSunSetTimeInMinutes, 1440, 120, 0);
+      cityBlackAlpha = mapTo(
+        currentTimeInMinutes,
+        currentSunSetTimeInMinutes,
+        1440,
+        120,
+        0
+      );
     }
     // MAINPULATE SKY COLOR HERE
     for (let i = 0; i < scannedDataBlack.length; i += 4) {
@@ -455,7 +539,7 @@ function runSun(){
   //----------------------------------------------------------------------------------------------------------//
 
   //let weatherId = currentWeatherId;
-  let weatherId = 804;
+  let weatherId = 801;
 
   let windDirection = currentWindDirectionDegrees;
   let windSpeed = currentWindSpeedMs;
@@ -488,8 +572,6 @@ function runSun(){
     cloudSizeMuliply = 5;
     setCloudBrightness = 50;
   }
-
-
 
   // CLOUDS FUNCTIONS
   //----------------------------------------------------------------------------------------------------------//
@@ -608,7 +690,7 @@ function runSun(){
 
     //RUN SKY
     runSky();
-    sunAndMoon()
+    sunAndMoon();
 
     //RUN WEATHER
     cloudRun();
@@ -618,8 +700,4 @@ function runSun(){
     cityBlackDraw();
     requestAnimationFrame(update);
   })();
-  
 })(); //LAST LINE OF WEATHER AND TIME SYSTEM
-
-
-
