@@ -37,12 +37,23 @@ if (window.innerWidth > 601) {
   optHeight = 640;
 }
 
-function setResponsiveSize() {
+(function setResponsiveSize() {
   relWidth = window.innerWidth / optWidth;
   relHeight = window.innerHeight / optHeight;
-}
+})();
 
-setResponsiveSize();
+
+
+
+//WindowSize detection
+// CROP IMAGE
+if (window.innerWidth > 601) {
+  croptWidthStart = 0;
+  croptWidthEnd = 1;
+} else {
+  croptWidthStart = 0.3;
+  croptWidthEnd = 0.6;
+}
 
 //----------------------------------------------------------------------------------------------------------//
 //DOM ELEMENTS
@@ -87,22 +98,43 @@ let sunAndMoonHeight = optHeight * relHeight;
 sunAndMoonCanvas.width = sunAndMoonWidth;
 sunAndMoonCanvas.height = sunAndMoonHeight;
 
-//WindowSize detection
-// CROP IMAGE
-if (window.innerWidth > 601) {
-  croptWidthStart = 0;
-  croptWidthEnd = 1;
-} else {
-  croptWidthStart = 0.3;
-  croptWidthEnd = 0.6;
-}
+
+//DOM BUTTON ELEMENTS 
+//SELECT LOCATION
+let pageBody = document.querySelector("body")
+let buttonStockholm = document.querySelector("#buttonStockholm")
+let buttonKarlshamn = document.querySelector("#buttonKarlshamn")
+
+pageBody.addEventListener("load", setLocation, true);
+buttonStockholm.addEventListener("click", setLocation, false);
+buttonKarlshamn.addEventListener("click", setLocation, false);
+
+// Set the location based on selection by user. Selection made by button press. Default city is Stockholm
+function setLocation (e){
+  let locationInputSelect = "Stockholm"
+  let locationInputCountrySelect = "Sweden";
+
+  let clickedItem = e.target.id;
+
+  if(clickedItem === "buttonKarlshamn") {
+    locationInputSelect = "Karlshamn"
+    locationInputCountrySelect = "Sweden"
+  }
+
+  if(clickedItem === "buttonStockholm") {
+    locationInputSelect = "Stockholm"
+    locationInputCountrySelect = "Sweden"
+  } 
+
+
+
 
 //----------------------------------------------------------------------------------------------------------//
 //WEATHER & TIME API // GET DATA
 //----------------------------------------------------------------------------------------------------------//
 let apiKeyWeather = "ef834ba6b77d78c6f0324aee2e241488";
-const locationInput = "Stockholm";
-const locationCountryInput = "Sweden";
+let locationInput = locationInputSelect;
+let locationCountryInput = locationInputCountrySelect;
 
 let currentWeatherURL =
   "http://api.openweathermap.org/data/2.5/weather?q=" +
@@ -203,7 +235,7 @@ const currentTimeData =
   //Current date reuslt
   //Current month
   let currentYear = jsonCurrenTimeandDate.year;
-  let currentMonth = jsonCurrenTimeandDate.month;
+  let currentMonth = Number(jsonCurrenTimeandDate.month);
   let currentDate = jsonCurrenTimeandDate.date.split("-");
   let currentDay = Number(currentDate[2]);
 
@@ -236,7 +268,19 @@ const currentTimeData =
   // const windows = new Image();
 
   if (locationInput === "Stockholm") {
-    cityImage.src = "PlaceHolderImagesv1/cityStockholm.png";
+    if (currentMonth <= 3) {
+      cityImage.src = "PlaceHolderImagesv1/cityStockholmWinter.png";
+    }
+    if (currentMonth > 3 && currentMonth < 9) {
+      cityImage.src = "PlaceHolderImagesv1/cityStockholm.png";
+    }
+    if (currentMonth > 8 && currentMonth < 12) {
+      cityImage.src = "PlaceHolderImagesv1/cityStockholmAutumn.png";
+    }
+    if (currentMonth === 12) {
+      cityImage.src = "PlaceHolderImagesv1/cityStockholmWinter.png";
+    }
+
     cityBlackImage.src = "PlaceHolderImagesv1/cityStockholmBlack.png";
     // windows.src = "PlaceHolderImagesv1/windows.png";
   }
@@ -255,7 +299,6 @@ const currentTimeData =
   // Load Sun and Moon
   const sunA = new Image();
   sunA.src = "PlaceHolderImagesv1/sun.png";
-
   //----------------------------------------------------------------------------------------------------------//
   // WEATHER, DAY AND NIGHT CYCLE, SKY, SEASON IMPLEMENTATION SECTION
   //----------------------------------------------------------------------------------------------------------//
@@ -367,49 +410,46 @@ const currentTimeData =
 
   // MOON CYCLE
   //----------------------------------------------------------------------------------------------------------//
-// SET SUN POSITION
-let moonYPos;
-let moonXPos;
-if(currentTimeInMinutes < currentSunRiseTimeInMinutes){
-  moonXPos = mapTo(
-    currentTimeInMinutes,
-    0,
-    currentSunRiseTimeInMinutes,
-    0,
-    window.innerWidth/2)}
-  else{ moonXPos = mapTo(
-    currentTimeInMinutes,
-    currentSunSetTimeInMinutes,
-    1440,
-    window.innerWidth/2,
-    window.innerWidth) }
-
-
-if (currentTimeInMinutes < 720) {
-  sunYPos = mapTo(
-    currentTimeInMinutes,
-    0 + currentSunRiseTimeInMinutes,
-    0 + currentSunRiseTimeInMinutes + lengthOfDay / 2,
-    window.innerHeight / 2,
-    window.innerHeight / 6
-  );
-} else {
-  sunYPos = mapTo(
-    currentTimeInMinutes,
-    0 + currentSunRiseTimeInMinutes + lengthOfDay / 2,
-    0 + currentSunRiseTimeInMinutes + lengthOfDay,
-    window.innerHeight / 6,
-    window.innerHeight / 2
-  );
-}
-  function runMoon() {
-    sunAndMoonCtx.drawImage(
-      moonA,
-      moonXPos,
-      150,
-      100,
-      100
+  // SET SUN POSITION
+  let moonYPos;
+  let moonXPos;
+  if (currentTimeInMinutes < currentSunRiseTimeInMinutes) {
+    moonXPos = mapTo(
+      currentTimeInMinutes,
+      0,
+      currentSunRiseTimeInMinutes,
+      0,
+      window.innerWidth / 2
     );
+  } else {
+    moonXPos = mapTo(
+      currentTimeInMinutes,
+      currentSunSetTimeInMinutes,
+      1440,
+      window.innerWidth / 2,
+      window.innerWidth
+    );
+  }
+
+  if (currentTimeInMinutes < 720) {
+    sunYPos = mapTo(
+      currentTimeInMinutes,
+      0 + currentSunRiseTimeInMinutes,
+      0 + currentSunRiseTimeInMinutes + lengthOfDay / 2,
+      window.innerHeight / 2,
+      window.innerHeight / 6
+    );
+  } else {
+    sunYPos = mapTo(
+      currentTimeInMinutes,
+      0 + currentSunRiseTimeInMinutes + lengthOfDay / 2,
+      0 + currentSunRiseTimeInMinutes + lengthOfDay,
+      window.innerHeight / 6,
+      window.innerHeight / 2
+    );
+  }
+  function runMoon() {
+    sunAndMoonCtx.drawImage(moonA, moonXPos, 150, 100, 100);
   }
 
   //----------------------------------------------------------------------------------------------------------//
@@ -687,6 +727,7 @@ if (currentTimeInMinutes < 720) {
   //----------------------------------------------------------------------------------------------------------//
   (function update() {
     weatherCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    sunAndMoonCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
     //RUN SKY
     runSky();
@@ -701,3 +742,5 @@ if (currentTimeInMinutes < 720) {
     requestAnimationFrame(update);
   })();
 })(); //LAST LINE OF WEATHER AND TIME SYSTEM
+
+} // LAST LINE SET LOCATION

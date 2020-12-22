@@ -1,23 +1,55 @@
+@font-face {
+  src: url(ARCADECLASSIC.ttf);
+  font-family: pixelFont;
+}
+
 body {
-    margin: 0px ;
-    margin-bottom: 0px;
+  margin: 0px;
+  margin-bottom: 0px;
 }
 
-#wrapper{
-    position:relative;
-   
+#wrapper {
+  position: relative;
 }
-#skyCanvas1, #weather, #cityCanvas, #cityCanvasBlack, #cityCanvasMain, #sunAndMoonCanvas {
-    position:absolute; top:0px; left:0px;
+#skyCanvas1,
+#weather,
+#cityCanvas,
+#cityCanvasBlack,
+#cityCanvasMain,
+#sunAndMoonCanvas {
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
 
-
-#textOverlay {
-    position: absolute; 
-    z-index: 1; 
-    left: 50px;
-     top: 20px;
-      width:100px;
-       height:20px;
-       color: whitesmoke;
+.buttonClass:hover {
+  color: red;
+  cursor: pointer;
 }
+.buttonClass:active{
+    color: blue;
+}
+
+#textOverlayLocation {
+  font-family: pixelFont;
+  font-size: large;
+  position: absolute;
+  z-index: 1;
+  left: 50px;
+  top: 20px;
+  width: 100px;
+  height: 20px;
+  color: palevioletred;
+}
+
+#textOverlayForcast {
+    font-family: pixelFont;
+    font-size: large;
+    position: absolute;
+    z-index: 1;
+    left: 200px;
+    top: 20px;
+    width: 100px;
+    height: 20px;
+    color: greenyellow;
+  }
