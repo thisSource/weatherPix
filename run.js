@@ -110,10 +110,18 @@ buttonStockholm.addEventListener("click", setLocation, false);
 buttonKarlshamn.addEventListener("click", setLocation, false);
 
 // Set the location based on selection by user. Selection made by button press. Default city is Stockholm
+
+
+
+
+
+// ADD https://www.youtube.com/watch?v=Xwq1Hj1DyDM&ab_channel=KirupaChinnathambi
 function setLocation (e){
+ 
+  
+ 
   let locationInputSelect = "Stockholm"
   let locationInputCountrySelect = "Sweden";
-
   let clickedItem = e.target.id;
 
   if(clickedItem === "buttonKarlshamn") {
@@ -125,6 +133,15 @@ function setLocation (e){
     locationInputSelect = "Stockholm"
     locationInputCountrySelect = "Sweden"
   } 
+
+  // DOM SELECT CURRENT OR FORCAST
+  
+
+  
+  //DOM WEATHER RESULT TEXT
+
+
+
 
 
 
@@ -246,7 +263,7 @@ const currentTimeData =
   let lengthOfDay = currentSunSetTimeInMinutes - currentSunRiseTimeInMinutes;
 
   let currentTimeInMinutes = Number(currentHour) * 60 + Number(currentMinutes);
-  //let currentTimeInMinutes = 525;
+  // let currentTimeInMinutes = 1000;
 
   console.log(
     "current year " + currentYear,
@@ -257,6 +274,8 @@ const currentTimeData =
     "current miuntes: " + currentMinutes,
     "current time in minutes: " + currentTimeInMinutes
   );
+
+ 
 
   //----------------------------------------------------------------------------------------------------------//
   //LOAD MATERIAL
@@ -282,6 +301,25 @@ const currentTimeData =
     }
 
     cityBlackImage.src = "PlaceHolderImagesv1/cityStockholmBlack.png";
+    // windows.src = "PlaceHolderImagesv1/windows.png";
+  }
+
+
+  if (locationInput === "Karlshamn") {
+    if (currentMonth <= 3) {
+      cityImage.src = "PlaceHolderImagesv1/karlshamn.png";
+    }
+    if (currentMonth > 3 && currentMonth < 9) {
+      cityImage.src = "PlaceHolderImagesv1/karlshamn.png";
+    }
+    if (currentMonth > 8 && currentMonth < 12) {
+      cityImage.src = "PlaceHolderImagesv1/karlshamn.png";
+    }
+    if (currentMonth === 12) {
+      cityImage.src = "PlaceHolderImagesv1/karlshamn.png";
+    }
+
+    cityBlackImage.src = "PlaceHolderImagesv1/karlshamn.png";
     // windows.src = "PlaceHolderImagesv1/windows.png";
   }
 
@@ -410,7 +448,7 @@ const currentTimeData =
 
   // MOON CYCLE
   //----------------------------------------------------------------------------------------------------------//
-  // SET SUN POSITION
+  // SET MOON POSITION
   let moonYPos;
   let moonXPos;
   if (currentTimeInMinutes < currentSunRiseTimeInMinutes) {
@@ -578,8 +616,45 @@ const currentTimeData =
   // WEATHER FUNCTIONS
   //----------------------------------------------------------------------------------------------------------//
 
-  //let weatherId = currentWeatherId;
-  let weatherId = 801;
+  // SET IF TO DISPLAY CURRENT WEATHER OR FORCAST
+  let buttonCurrentWeather = document.querySelector("#buttonCurrentWeather");
+  let buttonTomorrowWeather = document.querySelector("#buttonTomorrowWeather");
+
+ buttonCurrentWeather.addEventListener("click", setForecastorCurrent)
+ buttonTomorrowWeather.addEventListener("click", setForecastorCurrent)
+ buttonCurrentWeather.click()
+
+  function setForecastorCurrent (e){
+    let isCurrentWeather = true;
+    let isForcastWeather = false;
+    let clickedItemForcast = e.target.id;
+  
+    if(clickedItemForcast === "buttonCurrentWeather") {
+      isCurrentWeather = true;
+      isForcastWeather = false;
+    }
+
+    if(clickedItemForcast === "buttonCurrentWeather") {
+      isCurrentWeather = true;
+      isForcastWeather = false;
+    }
+  
+    if(clickedItemForcast === "buttonTomorrowWeather") {
+      isForcastWeather = true;
+      isCurrentWeather = false;
+    } 
+  
+    console.log(isForcastWeather)
+
+    let weatherId = currentWeatherId;
+
+if (isCurrentWeather === true){
+ 
+  weatherId = currentWeatherId;
+} else { weatherId = forecast_Plus1D_At_1200_WeatherId}
+
+  //let weatherId = 801;
+console.log("Selected ID " + weatherId)
 
   let windDirection = currentWindDirectionDegrees;
   let windSpeed = currentWindSpeedMs;
@@ -595,6 +670,7 @@ const currentTimeData =
   //----------------------------------------------------------------------------------------------------------//
   //SET WEATHER VARS BASED ON WEATHER ID
   // https://openweathermap.org/weather-conditions
+
 
   // 801
   if (weatherId === 801) {
@@ -728,6 +804,8 @@ const currentTimeData =
   (function update() {
     weatherCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     sunAndMoonCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    city2Ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    cityBlackCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
     //RUN SKY
     runSky();
@@ -741,6 +819,7 @@ const currentTimeData =
     cityBlackDraw();
     requestAnimationFrame(update);
   })();
-})(); //LAST LINE OF WEATHER AND TIME SYSTEM
+} // LAST LINE SET FORECAST TRUE OR FALSE
 
+})(); //LAST LINE OF WEATHER AND TIME SYSTEM
 } // LAST LINE SET LOCATION

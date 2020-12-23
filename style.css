@@ -1,5 +1,5 @@
 @font-face {
-  src: url(ARCADECLASSIC.ttf);
+  src: url(Fonts/ARCADECLASSIC.ttf);
   font-family: pixelFont;
 }
 
@@ -53,3 +53,16 @@ body {
     height: 20px;
     color: greenyellow;
   }
+
+  #textOverlayWeather {
+    font-family: pixelFont;
+    font-size: large;
+    position: absolute;
+    z-index: 1;
+    left: 50px;
+    top: 500px;
+    width: 100px;
+    height: 20px;
+    color: blanchedalmond;
+  }
+  
