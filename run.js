@@ -671,21 +671,47 @@ console.log("Selected ID " + weatherId)
   //SET WEATHER VARS BASED ON WEATHER ID
   // https://openweathermap.org/weather-conditions
 
+  //ID 800- 804
+  //----------------------------------------------------------------------------------------------------------//
+   // 800
+   if (weatherId === 800) {
+    //Clouds
+    xSpeedByWindSpeed = 1 * windDirection;
+    numberOfClouds = 1;
+    cloudSizeMuliply = 2.5;
+    setCloudBrightness = 0;
+  }
 
   // 801
   if (weatherId === 801) {
     //Clouds
     xSpeedByWindSpeed = 1 * windDirection;
-    numberOfClouds = 5;
-    cloudSizeMuliply = 1.5;
+    numberOfClouds = 10;
+    cloudSizeMuliply = 2.5;
     setCloudBrightness = 0;
+  }
+  // 802
+  if (weatherId === 802) {
+    //Clouds
+    xSpeedByWindSpeed = 1 * windDirection;
+    numberOfClouds = 25;
+    cloudSizeMuliply = 2.5;
+    setCloudBrightness = 15;
+  }
+   // 803
+   if (weatherId === 803) {
+    //Clouds
+    xSpeedByWindSpeed = 1 * windDirection;
+    numberOfClouds = 35;
+    cloudSizeMuliply = 3.5;
+    setCloudBrightness = 25;
   }
   // 804
   if (weatherId === 804) {
     //Clouds
     xSpeedByWindSpeed = 1 * windDirection;
     numberOfClouds = 50;
-    cloudSizeMuliply = 5;
+    cloudSizeMuliply = 3;
     setCloudBrightness = 50;
   }
 
