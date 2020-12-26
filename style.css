@@ -16,7 +16,8 @@ body {
 #cityCanvas,
 #cityCanvasBlack,
 #cityCanvasMain,
-#sunAndMoonCanvas {
+#sunAndMoonCanvas,
+#rainCanvas {
   position: absolute;
   top: 0px;
   left: 0px;
