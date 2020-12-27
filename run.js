@@ -109,13 +109,20 @@ sunAndMoonCanvas.height = sunAndMoonHeight;
 
 //DOM BUTTON ELEMENTS 
 //SELECT LOCATION
-let pageBody = document.querySelector("body")
-let buttonStockholm = document.querySelector("#buttonStockholm")
-let buttonKarlshamn = document.querySelector("#buttonKarlshamn")
+let pageBody = document.querySelector("body");
+let buttonStockholm = document.querySelector("#buttonStockholm");
+let buttonKarlshamn = document.querySelector("#buttonKarlshamn");
 
 pageBody.addEventListener("load", setLocation, true);
 buttonStockholm.addEventListener("click", setLocation, false);
 buttonKarlshamn.addEventListener("click", setLocation, false);
+
+//DOM TEXT OVERLAY ELEMETS
+let weatherLocation = document.getElementById("weatherLocation");
+let weatherDay = document.getElementById("weatherDay");
+let weatherDescription = document.getElementById("weatherDescription");
+let temperature = document.getElementById("temperature");
+let windSpeedText = document.getElementById("windSpeedAndDirection");
 
 // Set the location based on selection by user. Selection made by button press. Default city is Stockholm
 
@@ -215,6 +222,8 @@ const currentTimeData =
     currentSunSetTimeInMinutes
   );
 
+
+
   //FORECAST
   //Fetch 5-day 3h Weather forcast
   let responseForcastWeather = await fetch(forcastURL);
@@ -258,8 +267,9 @@ const currentTimeData =
   let currentMinutes = currentTimeSplit[1];
   let lengthOfDay = currentSunSetTimeInMinutes - currentSunRiseTimeInMinutes;
 
+
   let currentTimeInMinutes = Number(currentHour) * 60 + Number(currentMinutes);
-  // let currentTimeInMinutes = 1400;
+  // let currentTimeInMinutes = 600;
 
   console.log(
     "current year " + currentYear,
@@ -270,6 +280,35 @@ const currentTimeData =
     "current miuntes: " + currentMinutes,
     "current time in minutes: " + currentTimeInMinutes
   );
+
+
+// IS MORNING DAY OR NIGHT
+  
+let isMorning;
+let isDay;
+let isNight;
+
+if (currentTimeInMinutes <= currentSunRiseTimeInMinutes) {
+ isMorning = true;
+ isDay = false;
+ isNight = false;
+}
+
+if (currentTimeInMinutes > currentSunRiseTimeInMinutes && currentTimeInMinutes < currentSunSetTimeInMinutes ) {
+  isMorning = false;
+  isDay = true;
+  isNight = false;
+}
+
+if (currentTimeInMinutes > currentSunSetTimeInMinutes) {
+  isMorning = false;
+  isDay = false;
+  isNight = true;
+}
+
+console.log("Is morning? " + isMorning)
+console.log("Is day? " + isDay)
+console.log("Is Night? " + isNight)
 
  
 
@@ -558,8 +597,7 @@ const currentTimeData =
   let cityBlackAlpha;
 
   // MAP ALPHA TO TIME (cityBlackAlpha)
-  console.log(currentTimeInMinutes)
-  console.log(currentSunRiseTimeInMinutes)
+
 
     if (currentTimeInMinutes <= currentSunRiseTimeInMinutes) {
       cityBlackAlpha = mapTo(
@@ -585,7 +623,6 @@ const currentTimeData =
       );
     }
 
-    console.log(cityBlackAlpha)
   cityBlackCtx.globalAlpha = cityBlackAlpha;
 
   function cityBlackDraw() {
@@ -615,53 +652,93 @@ const currentTimeData =
  buttonCurrentWeather.click()
 
   function setForecastorCurrent (e){
+    let weatherSelectText = "Today"
+    let selectedWeatherDescription;
+    let selectedTemp;
+    let selectedWinddirection;
+    let selectedWindSpeed;
+
     let isCurrentWeather = true;
     let isForcastWeather = false;
     let clickedItemForcast = e.target.id;
   
+          // SET DOM TEXT ELEMENTS
     if(clickedItemForcast === "buttonCurrentWeather") {
       isCurrentWeather = true;
       isForcastWeather = false;
+      weatherSelectText = "Today";
+      selectedWeatherDescription = currentWeatherDescription;
+      selectedTemp = currentTemperatureInCelsius;
+      selectedWinddirection = currentWindDirectionDegrees;
+      selectedWindSpeed = currentWindSpeedMs;
     }
 
-    if(clickedItemForcast === "buttonCurrentWeather") {
-      isCurrentWeather = true;
-      isForcastWeather = false;
-    }
   
     if(clickedItemForcast === "buttonTomorrowWeather") {
       isForcastWeather = true;
       isCurrentWeather = false;
+      weatherSelectText = "Tomorrow at 12.00";
+      selectedWeatherDescription = forecast_Plus1D_At_1200_Description;
+      selectedTemp = forecast_Plus1D_At_1200_TemperatureInCelsius;
+      selectedWinddirection = forecast_Plus1D_At_1200_DirectionDegrees;
+      selectedWindSpeed = forecast_Plus1D_At_1200_WindSpeed;
     } 
   
-    console.log(isForcastWeather)
+    weatherLocation.textContent = locationInputSelect
+    weatherDescription.textContent = selectedWeatherDescription;
+    temperature.textContent = selectedTemp + " °C"
+    weatherDay.textContent = "Weather " + weatherSelectText;
+    windSpeedText.textContent = "Wind speed " + selectedWindSpeed + " m/s"
+
+  
 
     let weatherId = currentWeatherId;
+    
 if (isCurrentWeather === true){
  
   weatherId = currentWeatherId;
-      //  weatherId = 804;
+      //  weatherId = 500;
 
 } else { weatherId = forecast_Plus1D_At_1200_WeatherId}
 
-  
-
+  // WIND VARIABELS
   let windDirection = currentWindDirectionDegrees;
   let windSpeed = currentWindSpeedMs;
-  // WEATHER VARIABELS
-
   let xSpeedByWindSpeed;
-  let clouds = [];
-  let numberOfClouds;
-  let cloudSizeMuliply;
-  let setCloudBrightness;
+ 
 
-//Load weather images
-console.log(weatherId)
 
+  // WIND SETUP
+  //Set cloud/rain/snow movement direction from wind degree direction.
+  if (windDirection < 181) {
+    windDirection = -1;
+  } else {
+    windDirection = +1;
+  }
+  //Set cloud speed based on windSpeed
+
+  if (windSpeed > 3) {
+    xSpeedByWindSpeed = 2;
+  }
+  if (windSpeed > 7) {
+    xSpeedByWindSpeed = 3;
+  } else {
+    xSpeedByWindSpeed = 1;
+  }
+
+
+  //Load weather images (clouds)
   //Call cloud images and set image to var
   let cloudImage = new Image();
   let cloudImg;
+
+  //Cloud variabels  for types of weather
+  let clouds = [];
+  let numberOfClouds;
+  let cloudSizeMuliply;
+
+  //Rain variabels for types of weather
+  let numberOfRainDrops;
 
   //WEATHER TYPES
   //----------------------------------------------------------------------------------------------------------//
@@ -670,7 +747,7 @@ console.log(weatherId)
 
   //ID 800- 804
   //----------------------------------------------------------------------------------------------------------//
-   // 800
+   // 800 - Clear
 
    if (weatherId === 800) {
     //Clouds
@@ -683,7 +760,7 @@ console.log(weatherId)
    cloudImg = cloudImage;
   }
 
-  // 801
+  // 801 - Few clouds
   if (weatherId === 801) {
     //Clouds
     xSpeedByWindSpeed = 1 * windDirection;
@@ -720,6 +797,7 @@ console.log(weatherId)
   if (weatherId === 804) {
     //Clouds
     xSpeedByWindSpeed = 1 * windDirection;
+
     numberOfClouds = 50;
     cloudSizeMuliply = 5;
     setCloudBrightness = 50;
@@ -727,6 +805,23 @@ console.log(weatherId)
      cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
      cloudImg = cloudImage;
   }
+
+  //ID 500- 531
+  //----------------------------------------------------------------------------------------------------------//
+  // 500 - Light Rain
+  if (weatherId === 500) {
+    //Clouds
+    xSpeedByWindSpeed = 1 * windDirection;
+    numberOfClouds = 50;
+    cloudSizeMuliply = 5;
+    setCloudBrightness = 50;
+     //Clouds
+     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImg = cloudImage;
+     //Rain 
+    numberOfRainDrops = 100;
+  }
+
 
   // CLOUDS FUNCTIONS
   //----------------------------------------------------------------------------------------------------------//
@@ -757,24 +852,7 @@ console.log(weatherId)
     };
   }
 
-  // Cloud SETUP
 
-  //Set cloud movement direction from wind degree direction.
-  if (windDirection < 181) {
-    windDirection = -1;
-  } else {
-    windDirection = +1;
-  }
-  //Set cloud speed based on windSpeed
-
-  if (windSpeed > 3) {
-    xSpeedByWindSpeed = 2;
-  }
-  if (windSpeed > 7) {
-    xSpeedByWindSpeed = 3;
-  } else {
-    xSpeedByWindSpeed = 1;
-  }
 
   //Clouds initialize/setup
   for (let i = 0; i < numberOfClouds; i++) {
@@ -792,8 +870,35 @@ console.log(weatherId)
     );
   }
 
-  //Cloud global alpha
-  weatherCtx.globalAlpha = 0.01;
+
+  //Cloud global alpha. Map cloudAlpha to time 
+let cloudAlpha;
+
+  if (currentTimeInMinutes <= currentSunRiseTimeInMinutes) {
+    cloudAlpha = mapTo(
+      currentTimeInMinutes,
+      0,
+      currentSunRiseTimeInMinutes,
+      0,
+      1 
+    );
+  }
+
+  if (currentTimeInMinutes > currentSunRiseTimeInMinutes && currentTimeInMinutes < currentSunSetTimeInMinutes ) {
+    cloudAlpha = 1
+  }
+
+  if (currentTimeInMinutes > currentSunSetTimeInMinutes) {
+    cloudAlpha = mapTo(
+      currentTimeInMinutes,
+      currentSunSetTimeInMinutes,
+      1440,
+      1,
+      0
+    );
+  }
+
+  weatherCtx.globalAlpha = cloudAlpha;
 
   //Clouds run function
   function cloudRun() {
@@ -809,41 +914,29 @@ console.log(weatherId)
     }
   }
 
-  //Set cloud color
-  function cloudColor() {
-    let cloudBrightness = setCloudBrightness;
 
-    const scannedCloudImage = weatherCtx.getImageData(
-      0,
-      0,
-      window.innerWidth,
-      window.innerHeight
-    );
-    const scannedDataCloud = scannedCloudImage.data;
-
-    // MAINPULATE SKY COLOR HERE
-    for (let i = 0; i < scannedDataCloud.length; i += 4) {
-      scannedDataCloud[i + 0] =
-        scannedDataCloud[i + 0] - cloudBrightness - skyBrightness / 1.2;
-      scannedDataCloud[i + 1] =
-        scannedDataCloud[i + 1] - cloudBrightness - skyBrightness / 1.2;
-      scannedDataCloud[i + 2] =
-        scannedDataCloud[i + 2] - cloudBrightness - skyBrightness / 1.2;
-      scannedDataCloud[i + 3] = scannedDataCloud[i + 3];
-    }
-    scannedCloudImage.data = scannedDataCloud;
-    weatherCtx.putImageData(scannedCloudImage, 0, 0);
-  }
 
   //RAIN
   //----------------------------------------------------------------------------------------------------------//
   let particlesArray = [];
-  const numberOfParticles = 500;
+  const numberOfParticles = numberOfRainDrops;
   
+console.log(isDay)
+
   let dropImage = new Image();
-  dropImage.src = "PlaceHolderImagesv1/dropNight.png"
+  if(isMorning === true){
+    dropImage.src = "PlaceHolderImagesv1/dropNight.png"
+  }
+  if(isDay === true){
+    dropImage.src = "PlaceHolderImagesv1/drop.png"
+  }
+  if(isNight === true){
+    dropImage.src = "PlaceHolderImagesv1/dropNight.png"
+  }
   
-  rainCtx.globalAlpha = 0.15
+  
+  
+  rainCtx.globalAlpha = 0.2
   
   class Particle {
     constructor(x, y) {
@@ -851,7 +944,7 @@ console.log(weatherId)
       this.y = y;
       this.size = Math.random() * 7 + 1;
       this.weight = Math.random() * 2 + 3;
-      this.directionX = Math.random() *1 -1; // insert wind direction
+      this.directionX = Math.random() *  xSpeedByWindSpeed * 2; // insert wind direction
       this.r =  Math.random() * 255
       this.g = Math.random() * 255
       this.b = Math.random() * 255
@@ -904,8 +997,6 @@ console.log(weatherId)
 
     //RUN WEATHER
     cloudRun();
-    // cloudColor();
-
    
     //RUN CITY
     cityDrawMain();
