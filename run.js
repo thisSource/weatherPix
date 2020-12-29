@@ -132,20 +132,28 @@ let windSpeedText = document.getElementById("windSpeedAndDirection");
 
 // ADD https://www.youtube.com/watch?v=Xwq1Hj1DyDM&ab_channel=KirupaChinnathambi
 function setLocation (e){
+  let locationInputSelect
+  if( localStorage.Location === null){
+    locationInputSelect = "Stockholm"
+  } else locationInputSelect = localStorage.Location
  
-  
-  let locationInputSelect = "Stockholm"
   let locationInputCountrySelect = "Sweden";
   let clickedItem = e.target.id;
 
   if(clickedItem === "buttonKarlshamn") {
-    locationInputSelect = "Karlshamn"
+   localStorage.setItem("Location", "Karlshamn")
+    locationInputSelect = localStorage.Location
     locationInputCountrySelect = "Sweden"
+    location.reload()
+    
   }
 
   if(clickedItem === "buttonStockholm") {
-    locationInputSelect = "Stockholm"
+    localStorage.setItem("Location", "Stockholm")
+    locationInputSelect = localStorage.Location
     locationInputCountrySelect = "Sweden"
+    location.reload()
+
   } 
 
 
@@ -342,19 +350,19 @@ console.log("Is Night? " + isNight)
 
   if (locationInput === "Karlshamn") {
     if (currentMonth <= 3) {
-      cityImage.src = "PlaceHolderImagesv1/karlshamn.png";
+      cityImage.src = "PlaceHolderImagesv1/Karlshamn/cityKarlshamnWinter2.png";
     }
     if (currentMonth > 3 && currentMonth < 9) {
-      cityImage.src = "PlaceHolderImagesv1/karlshamn.png";
+      cityImage.src = "PlaceHolderImagesv1/Karlshamn/cityKarlshamnSummer2.png";
     }
     if (currentMonth > 8 && currentMonth < 12) {
-      cityImage.src = "PlaceHolderImagesv1/karlshamn.png";
+      cityImage.src = "PlaceHolderImagesv1/Karlshamn/cityKarlshamnWAutumn2.png";
     }
     if (currentMonth === 12) {
-      cityImage.src = "PlaceHolderImagesv1/karlshamn.png";
+      cityImage.src = "PlaceHolderImagesv1/Karlshamn/cityKarlshamnWinter2.png";
     }
 
-    cityBlackImage.src = "PlaceHolderImagesv1/karlshamn.png";
+    cityBlackImage.src = "PlaceHolderImagesv1//Karlshamn/cityKarlshamnBlack2.png";
     // windows.src = "PlaceHolderImagesv1/windows.png";
   }
 
@@ -820,6 +828,20 @@ if (isCurrentWeather === true){
      cloudImg = cloudImage;
      //Rain 
     numberOfRainDrops = 100;
+  }
+
+  // 501 - Moderate Rain
+  if (weatherId === 501) {
+    //Clouds
+    xSpeedByWindSpeed = 1 * windDirection;
+    numberOfClouds = 50;
+    cloudSizeMuliply = 5;
+    setCloudBrightness = 50;
+     //Clouds
+     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImg = cloudImage;
+     //Rain 
+    numberOfRainDrops = 200;
   }
 
 
