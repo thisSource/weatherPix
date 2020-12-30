@@ -128,18 +128,10 @@ let temperature = document.getElementById("temperature");
 let windSpeedText = document.getElementById("windSpeedAndDirection");
 
 
-
-
-let forcastSelector = document.getElementById("forcastSelector")
-
-
-
 // Set the location based on selection by user. Selection made by button press. Default city is Stockholm
 
 // ADD https://www.youtube.com/watch?v=Xwq1Hj1DyDM&ab_channel=KirupaChinnathambi
-let timeToRunForcast = false
 function setLocation (e){
-  timeToRunForcast = true;
   let locationInputSelect
   if( localStorage.Location === undefined){
     locationInputSelect = "Stockholm"
@@ -665,47 +657,33 @@ console.log("Is Night? " + isNight)
   let buttonCurrentWeather = document.querySelector("#buttonCurrentWeather");
   let buttonTomorrowWeather = document.querySelector("#buttonTomorrowWeather");
 
+  let forcastSelector = document.getElementById("forcastSelector")
  buttonCurrentWeather.addEventListener("click", setForecastorCurrent)
  buttonTomorrowWeather.addEventListener("click", setForecastorCurrent)
- buttonCurrentWeather.click()
-
-
-
-pageBody
+ 
+  buttonCurrentWeather.click()
+ 
 forcastSelector.addEventListener("change", setForecastorCurrent)
-console.log(sessionStorage)
 
   function setForecastorCurrent (e){
-
-
     let weatherSelectText = "Today"
     let selectedWeatherDescription;
     let selectedTemp;
     let selectedWinddirection;
     let selectedWindSpeed;
-
-    
-    let isCurrentWeather;
-    let isForcastWeather;
     let selectedItemForcast = e.target.value;
     let clickedItemForcast = e.target.id;
     let weatherId = currentWeatherId;
           // SET DOM TEXT ELEMENTS
         
 
-          if( sessionStorage.isCurrentWeather === undefined){
-            isCurrentWeather = true
-            isForcastWeather = false
-          } else {  
-            isCurrentWeather = sessionStorage.isCurrentWeather
-            isForcastWeather = sessionStorage.isForcastWeather} 
+       
               //Set weather id to current
+
+
 
       if(selectedItemForcast === "today" || clickedItemForcast === "buttonCurrentWeather") {
       
-      sessionStorage.setItem("isCurrentWeather", true)
-      sessionStorage.setItem("isForcastWeather", false)
-
       weatherId = currentWeatherId;
       weatherSelectText = "Today";
       selectedWeatherDescription = currentWeatherDescription;
@@ -717,16 +695,14 @@ console.log(sessionStorage)
             //Set weather id to tomorrow at 12.00
 
     if(selectedItemForcast === "tomorrowAt12") {
-      sessionStorage.setItem("isCurrentWeather", false)
-      sessionStorage.setItem("isForcastWeather", true)
-
+  
       weatherId = forecast_Plus1D_At_1200_WeatherId
       weatherSelectText = "Tomorrow at 12.00";
       selectedWeatherDescription = forecast_Plus1D_At_1200_Description;
       selectedTemp = forecast_Plus1D_At_1200_TemperatureInCelsius;
       selectedWinddirection = forecast_Plus1D_At_1200_DirectionDegrees;
       selectedWindSpeed = forecast_Plus1D_At_1200_WindSpeed;     
-    } 
+    } else {console.log("nothing")}
   
     weatherLocation.textContent = locationInputSelect
     weatherDescription.textContent = selectedWeatherDescription;
