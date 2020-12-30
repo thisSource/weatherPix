@@ -9,13 +9,23 @@
 <body>
 
 <div id="textOverlayLocation">     
-    <p id="buttonStockholm" class="buttonClass">Stockholm</p>
-    <p id="buttonKarlshamn" class="buttonClass">Karlshamn</p>  
+
+    <select name="locationSelector" id="locationSelector">
+        <option value="location">Location</option>
+        <option value="karlshamn">Karlshamn</option>
+        <option value="stockholm">Stockholm</option>
+    </select>
 </div>
 
-<div id="textOverlayForcast">     
-    <p id="buttonCurrentWeather" class="buttonClass">Today</p>
-    <p id="buttonTomorrowWeather" class="buttonClass">Tomorrow</p>  
+<div id="textOverlayForcast">  
+    <select name="forcastSelector" id="forcastSelector">
+        <option value="forcast">Forecast</option>
+        <option value="today" >Current weather</option>
+        <option value="tomorrowAt12">Tomorrow 12.00</option>
+    </select>
+    <!-- Buttons for auto click -->
+    <p id="buttonCurrentWeather" class="buttonClass"></p>
+    <p id="buttonTomorrowWeather" class="buttonClass"></p>  
 </div>
 
 <div id="textOverlayWeather">     

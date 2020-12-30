@@ -113,9 +113,12 @@ let pageBody = document.querySelector("body");
 let buttonStockholm = document.querySelector("#buttonStockholm");
 let buttonKarlshamn = document.querySelector("#buttonKarlshamn");
 
+let locationSelector = document.getElementById("locationSelector")
+locationSelector.addEventListener("change", setLocation)
+
+//Runs the event listener 
 pageBody.addEventListener("load", setLocation, true);
-buttonStockholm.addEventListener("click", setLocation, false);
-buttonKarlshamn.addEventListener("click", setLocation, false);
+
 
 //DOM TEXT OVERLAY ELEMETS
 let weatherLocation = document.getElementById("weatherLocation");
@@ -124,23 +127,28 @@ let weatherDescription = document.getElementById("weatherDescription");
 let temperature = document.getElementById("temperature");
 let windSpeedText = document.getElementById("windSpeedAndDirection");
 
+
+
+
+let forcastSelector = document.getElementById("forcastSelector")
+
+
+
 // Set the location based on selection by user. Selection made by button press. Default city is Stockholm
 
-
-
-
-
 // ADD https://www.youtube.com/watch?v=Xwq1Hj1DyDM&ab_channel=KirupaChinnathambi
+let timeToRunForcast = false
 function setLocation (e){
+  timeToRunForcast = true;
   let locationInputSelect
-  if( localStorage.Location === null){
+  if( localStorage.Location === undefined){
     locationInputSelect = "Stockholm"
   } else locationInputSelect = localStorage.Location
  
   let locationInputCountrySelect = "Sweden";
-  let clickedItem = e.target.id;
+  let selectedLocation = e.target.value;
 
-  if(clickedItem === "buttonKarlshamn") {
+  if(selectedLocation === "karlshamn") {
    localStorage.setItem("Location", "Karlshamn")
     locationInputSelect = localStorage.Location
     locationInputCountrySelect = "Sweden"
@@ -148,13 +156,15 @@ function setLocation (e){
     
   }
 
-  if(clickedItem === "buttonStockholm") {
+  if(selectedLocation === "stockholm") {
     localStorage.setItem("Location", "Stockholm")
     locationInputSelect = localStorage.Location
     locationInputCountrySelect = "Sweden"
     location.reload()
-
   } 
+
+  // Set text to the selected location
+  locationSelector.options[locationSelector.selectedIndex].textContent = locationInputSelect;
 
 
 //----------------------------------------------------------------------------------------------------------//
@@ -659,21 +669,44 @@ console.log("Is Night? " + isNight)
  buttonTomorrowWeather.addEventListener("click", setForecastorCurrent)
  buttonCurrentWeather.click()
 
+
+
+pageBody
+forcastSelector.addEventListener("change", setForecastorCurrent)
+console.log(sessionStorage)
+
   function setForecastorCurrent (e){
+
+
     let weatherSelectText = "Today"
     let selectedWeatherDescription;
     let selectedTemp;
     let selectedWinddirection;
     let selectedWindSpeed;
 
-    let isCurrentWeather = true;
-    let isForcastWeather = false;
+    
+    let isCurrentWeather;
+    let isForcastWeather;
+    let selectedItemForcast = e.target.value;
     let clickedItemForcast = e.target.id;
-  
+    let weatherId = currentWeatherId;
           // SET DOM TEXT ELEMENTS
-    if(clickedItemForcast === "buttonCurrentWeather") {
-      isCurrentWeather = true;
-      isForcastWeather = false;
+        
+
+          if( sessionStorage.isCurrentWeather === undefined){
+            isCurrentWeather = true
+            isForcastWeather = false
+          } else {  
+            isCurrentWeather = sessionStorage.isCurrentWeather
+            isForcastWeather = sessionStorage.isForcastWeather} 
+              //Set weather id to current
+
+      if(selectedItemForcast === "today" || clickedItemForcast === "buttonCurrentWeather") {
+      
+      sessionStorage.setItem("isCurrentWeather", true)
+      sessionStorage.setItem("isForcastWeather", false)
+
+      weatherId = currentWeatherId;
       weatherSelectText = "Today";
       selectedWeatherDescription = currentWeatherDescription;
       selectedTemp = currentTemperatureInCelsius;
@@ -681,15 +714,18 @@ console.log("Is Night? " + isNight)
       selectedWindSpeed = currentWindSpeedMs;
     }
 
-  
-    if(clickedItemForcast === "buttonTomorrowWeather") {
-      isForcastWeather = true;
-      isCurrentWeather = false;
+            //Set weather id to tomorrow at 12.00
+
+    if(selectedItemForcast === "tomorrowAt12") {
+      sessionStorage.setItem("isCurrentWeather", false)
+      sessionStorage.setItem("isForcastWeather", true)
+
+      weatherId = forecast_Plus1D_At_1200_WeatherId
       weatherSelectText = "Tomorrow at 12.00";
       selectedWeatherDescription = forecast_Plus1D_At_1200_Description;
       selectedTemp = forecast_Plus1D_At_1200_TemperatureInCelsius;
       selectedWinddirection = forecast_Plus1D_At_1200_DirectionDegrees;
-      selectedWindSpeed = forecast_Plus1D_At_1200_WindSpeed;
+      selectedWindSpeed = forecast_Plus1D_At_1200_WindSpeed;     
     } 
   
     weatherLocation.textContent = locationInputSelect
@@ -698,23 +734,12 @@ console.log("Is Night? " + isNight)
     weatherDay.textContent = "Weather " + weatherSelectText;
     windSpeedText.textContent = "Wind speed " + selectedWindSpeed + " m/s"
 
-  
-
-    let weatherId = currentWeatherId;
-    
-if (isCurrentWeather === true){
- 
-  weatherId = currentWeatherId;
-      //  weatherId = 500;
-
-} else { weatherId = forecast_Plus1D_At_1200_WeatherId}
 
   // WIND VARIABELS
   let windDirection = currentWindDirectionDegrees;
   let windSpeed = currentWindSpeedMs;
   let xSpeedByWindSpeed;
  
-
 
   // WIND SETUP
   //Set cloud/rain/snow movement direction from wind degree direction.
@@ -943,7 +968,6 @@ let cloudAlpha;
   let particlesArray = [];
   const numberOfParticles = numberOfRainDrops;
   
-console.log(isDay)
 
   let dropImage = new Image();
   if(isMorning === true){
