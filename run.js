@@ -549,16 +549,14 @@ console.log("Is Night? " + isNight)
       skyWidth,
       skyHeight
     );
-    const scannedImage = skyCtx.getImageData(0, 0, skyWidth, skyHeight);
-    const scannedData = scannedImage.data;
 
-    // MAP RGB TO TIME
+    // MAP RGBA TO TIME
     if (currentTimeInMinutes <= 719) {
       skyBrightness = mapTo(
         currentTimeInMinutes,
         currentSunRiseTimeInMinutes,
         719,
-        120,
+        0.8,
         0
       );
     }
@@ -568,20 +566,15 @@ console.log("Is Night? " + isNight)
         719,
         currentSunSetTimeInMinutes,
         0,
-        120
+        0.8
       );
     }
 
-    // MAINPULATE SKY COLOR HERE
-    for (let i = 0; i < scannedData.length; i += 4) {
-      scannedData[i + 0] = scannedData[i + 0] - skyBrightness;
-      scannedData[i + 1] = scannedData[i + 1] - skyBrightness;
-      scannedData[i + 2] = scannedData[i + 2] - skyBrightness;
-      scannedData[i + 3] = scannedData[i + 3];
-    }
-    scannedImage.data = scannedData;
-    skyCtx.putImageData(scannedImage, 0, 0);
-    return skyBrightness;
+    // MAINPULATE SKY COLOR
+  
+    skyCtx.fillStyle = "rgb(0,0,0,"+ skyBrightness +")"
+    skyCtx.fillRect(0,0,window.innerWidth, window.innerHeight)
+    skyCtx.fill()
   }
 
   //----------------------------------------------------------------------------------------------------------//
@@ -673,15 +666,10 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
     let selectedWindSpeed;
     let selectedItemForcast = e.target.value;
     let clickedItemForcast = e.target.id;
-    let weatherId = currentWeatherId;
-          // SET DOM TEXT ELEMENTS
-        
+    let weatherId = currentWeatherId;        
 
        
-              //Set weather id to current
-
-
-
+          //Set weather id to current
       if(selectedItemForcast === "today" || clickedItemForcast === "buttonCurrentWeather") {
       
       weatherId = currentWeatherId;
@@ -690,6 +678,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
       selectedTemp = currentTemperatureInCelsius;
       selectedWinddirection = currentWindDirectionDegrees;
       selectedWindSpeed = currentWindSpeedMs;
+      currentTimeInMinutes = Number(currentHour) * 60 + Number(currentMinutes); //reset time
     }
 
             //Set weather id to tomorrow at 12.00
@@ -701,8 +690,9 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
       selectedWeatherDescription = forecast_Plus1D_At_1200_Description;
       selectedTemp = forecast_Plus1D_At_1200_TemperatureInCelsius;
       selectedWinddirection = forecast_Plus1D_At_1200_DirectionDegrees;
-      selectedWindSpeed = forecast_Plus1D_At_1200_WindSpeed;     
-    } else {console.log("nothing")}
+      selectedWindSpeed = forecast_Plus1D_At_1200_WindSpeed;    
+      currentTimeInMinutes = 720 //Sets the time to 12.00
+    } 
   
     weatherLocation.textContent = locationInputSelect
     weatherDescription.textContent = selectedWeatherDescription;
@@ -1007,11 +997,13 @@ let cloudAlpha;
   //UPDATE / DRAW / ANIMATE
   //----------------------------------------------------------------------------------------------------------//
   (function update() {
+
     weatherCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     sunAndMoonCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     cityCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     cityBlackCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     rainCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    skyCtx.clearRect(0,0, window.innerWidth, window.innerHeight)
 
     //RUN SKY
     sunAndMoon();

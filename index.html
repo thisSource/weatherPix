@@ -1,58 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PixelWeatherWorld</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<div id="textOverlayLocation">     
-
-    <select name="locationSelector" id="locationSelector">
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="textOverlayLocation">
+      <select name="locationSelector" id="locationSelector">
         <option value="location">Location</option>
         <option value="karlshamn">Karlshamn</option>
         <option value="stockholm">Stockholm</option>
-    </select>
-</div>
+      </select>
+    </div>
 
-<div id="textOverlayForcast">  
-    <select name="forcastSelector" id="forcastSelector">
-        <option value="forcast">Forecast</option>
-        <option value="today" >Current weather</option>
-        <option value="tomorrowAt12">Tomorrow 12.00</option>
-    </select>
-    <!-- Buttons for auto click -->
-    <p id="buttonCurrentWeather" class="buttonClass"></p>
-    <p id="buttonTomorrowWeather" class="buttonClass"></p>  
-</div>
+    <div id="textOverlayForcast">
+      <div class="selctor">
+        <select name="forcastSelector" id="forcastSelector">
+          <option value="forcast">Forecast</option>
+          <option value="today">Current weather</option>
+          <option value="tomorrowAt12">Tomorrow 12.00</option>
+        </select>
+      </div>
+      <!-- Buttons for auto click -->
+      <p id="buttonCurrentWeather" class="buttonClass"></p>
+      <p id="buttonTomorrowWeather" class="buttonClass"></p>
+    </div>
 
-<div id="textOverlayWeather">     
-    <p id="weatherLocation">location</p>
-    <p id="weatherDay">day</p>
-    <p id="weatherDescription">descriptiom</p>
-    <p id="temperature">temp</p>  
-    <p id="windSpeedAndDirection">wind</p>  
+    <div id="textOverlayWeather">
+      <p id="weatherLocation">location</p>
+      <p id="weatherDay">day</p>
+      <p id="weatherDescription">descriptiom</p>
+      <p id="temperature">temp</p>
+      <p id="windSpeedAndDirection">wind</p>
+    </div>
 
-</div>
-
-<div id=wrapper>      
-   
-    <canvas id="skyCanvas"></canvas>
-    <canvas id="sunAndMoonCanvas"></canvas>
-    <canvas id="weather"></canvas>
-    <canvas id="cityCanvasMain"></canvas>
-    <canvas id="cityCanvasBlack"></canvas>
-    <canvas id="rainCanvas"></canvas>
-
-</div>
+    <div id="wrapper">
+      <canvas id="skyCanvas"></canvas>
+      <canvas id="sunAndMoonCanvas"></canvas>
+      <canvas id="weather"></canvas>
+      <canvas id="cityCanvasMain"></canvas>
+      <canvas id="cityCanvasBlack"></canvas>
+      <canvas id="rainCanvas"></canvas>
+    </div>
     <!-- <canvas id="testCanvas"></canvas> -->
 
     <script src="weather.js"></script>
     <script src="run.js"></script>
-
-        
-   
-</body>
+  </body>
 </html>
