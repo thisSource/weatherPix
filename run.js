@@ -835,6 +835,20 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
     numberOfRainDrops = 200;
   }
 
+   // 502 - heavy intensity rain
+   if (weatherId === 501) {
+    //Clouds
+    xSpeedByWindSpeed = 1 * windDirection;
+    numberOfClouds = 50;
+    cloudSizeMuliply = 5;
+    setCloudBrightness = 50;
+     //Clouds
+     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImg = cloudImage;
+     //Rain 
+    numberOfRainDrops = 300;
+  }
+
 
   // CLOUDS FUNCTIONS
   //----------------------------------------------------------------------------------------------------------//
