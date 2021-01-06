@@ -716,14 +716,16 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
   }
   //Set cloud speed based on windSpeed
 
+  console.log(windSpeed)
+ if(windSpeed <=3){
+  xSpeedByWindSpeed = 0.1;
+ }
   if (windSpeed > 3) {
-    xSpeedByWindSpeed = 2;
+    xSpeedByWindSpeed = 0.3;
   }
   if (windSpeed > 7) {
-    xSpeedByWindSpeed = 3;
-  } else {
-    xSpeedByWindSpeed = 1;
-  }
+    xSpeedByWindSpeed = 0.5;
+  } 
 
 
   //Load weather images (clouds)
@@ -750,7 +752,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
   // 500 - Light Rain
   if (weatherId === 500) {
     //Clouds
-    xSpeedByWindSpeed = 1 * windDirection;
+    xSpeedByWindSpeed = xSpeedByWindSpeed * windDirection;
     numberOfClouds = 50;
     cloudSizeMuliply = 5;
     setCloudBrightness = 50;
@@ -764,7 +766,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
   // 501 - Moderate Rain
   if (weatherId === 501) {
     //Clouds
-    xSpeedByWindSpeed = 1 * windDirection;
+    xSpeedByWindSpeed = xSpeedByWindSpeed * windDirection;
     numberOfClouds = 50;
     cloudSizeMuliply = 5;
     setCloudBrightness = 50;
@@ -778,7 +780,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
    // 502 - heavy intensity rain
    if (weatherId === 501) {
     //Clouds
-    xSpeedByWindSpeed = 1 * windDirection;
+    xSpeedByWindSpeed = xSpeedByWindSpeed * windDirection;
     numberOfClouds = 50;
     cloudSizeMuliply = 5;
     setCloudBrightness = 50;
@@ -792,11 +794,23 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
    //ID 600- 622 SNOW
   //----------------------------------------------------------------------------------------------------------//
    // 600 - Light Snow
+   if (weatherId === 600) {
+    //Clouds
+    xSpeedByWindSpeed = xSpeedByWindSpeed * windDirection;
+    numberOfClouds = 50;
+    cloudSizeMuliply = 5;
+    setCloudBrightness = 50;
+     //Clouds
+     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImg = cloudImage;
+     //Snow 
+    numberOfSnowFlakes = 50;
+  }
 
    // 615 Light Snow and Rain
    if (weatherId === 615) {
     //Clouds
-    xSpeedByWindSpeed = 1 * windDirection;
+    xSpeedByWindSpeed = xSpeedByWindSpeed * windDirection;
     numberOfClouds = 50;
     cloudSizeMuliply = 5;
     setCloudBrightness = 50;
@@ -816,7 +830,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
 
    if (weatherId === 800) {
     //Clouds
-    xSpeedByWindSpeed = 1 * windDirection;
+    xSpeedByWindSpeed = xSpeedByWindSpeed * windDirection;
     numberOfClouds = 1;
     cloudSizeMuliply = 2.5;
     setCloudBrightness = 0;
@@ -828,7 +842,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
   // 801 - Few clouds
   if (weatherId === 801) {
     //Clouds
-    xSpeedByWindSpeed = 1 * windDirection;
+    xSpeedByWindSpeed = xSpeedByWindSpeed * windDirection;
     numberOfClouds = 5;
     cloudSizeMuliply = 2.5;
     setCloudBrightness = 0;
@@ -839,7 +853,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
   // 802
   if (weatherId === 802) {
     //Clouds
-    xSpeedByWindSpeed = 1 * windDirection;
+    xSpeedByWindSpeed = xSpeedByWindSpeed * windDirection;
     numberOfClouds =  13;
     cloudSizeMuliply = 2.5;
     setCloudBrightness = 15;
@@ -850,7 +864,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
    // 803
    if (weatherId === 803) {
     //Clouds
-    xSpeedByWindSpeed = 1 * windDirection;
+    xSpeedByWindSpeed = xSpeedByWindSpeed * windDirection;
     numberOfClouds = 35;
     cloudSizeMuliply = 3.5;
     setCloudBrightness = 25;
@@ -861,7 +875,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
   // 804
   if (weatherId === 804) {
     //Clouds
-    xSpeedByWindSpeed = 1 * windDirection;
+    xSpeedByWindSpeed = xSpeedByWindSpeed * windDirection;
 
     numberOfClouds = 50;
     cloudSizeMuliply = 5;
