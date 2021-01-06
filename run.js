@@ -738,11 +738,77 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
 
   //Rain variabels for types of weather
   let numberOfRainDrops;
+  let numberOfSnowFlakes;
 
   //WEATHER TYPES
   //----------------------------------------------------------------------------------------------------------//
   //SET WEATHER VARS BASED ON WEATHER ID
   // https://openweathermap.org/weather-conditions
+
+   //ID 500- 531 Rain
+  //----------------------------------------------------------------------------------------------------------//
+  // 500 - Light Rain
+  if (weatherId === 500) {
+    //Clouds
+    xSpeedByWindSpeed = 1 * windDirection;
+    numberOfClouds = 50;
+    cloudSizeMuliply = 5;
+    setCloudBrightness = 50;
+     //Clouds
+     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImg = cloudImage;
+     //Rain 
+    numberOfRainDrops = 100;
+  }
+
+  // 501 - Moderate Rain
+  if (weatherId === 501) {
+    //Clouds
+    xSpeedByWindSpeed = 1 * windDirection;
+    numberOfClouds = 50;
+    cloudSizeMuliply = 5;
+    setCloudBrightness = 50;
+     //Clouds
+     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImg = cloudImage;
+     //Rain 
+    numberOfRainDrops = 200;
+  }
+
+   // 502 - heavy intensity rain
+   if (weatherId === 501) {
+    //Clouds
+    xSpeedByWindSpeed = 1 * windDirection;
+    numberOfClouds = 50;
+    cloudSizeMuliply = 5;
+    setCloudBrightness = 50;
+     //Clouds
+     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImg = cloudImage;
+     //Rain 
+    numberOfRainDrops = 300;
+  }
+
+   //ID 600- 622 SNOW
+  //----------------------------------------------------------------------------------------------------------//
+   // 600 - Light Snow
+
+   // 615 Light Snow and Rain
+   if (weatherId === 615) {
+    //Clouds
+    xSpeedByWindSpeed = 1 * windDirection;
+    numberOfClouds = 50;
+    cloudSizeMuliply = 5;
+    setCloudBrightness = 50;
+     //Clouds
+     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImg = cloudImage;
+     //Rain 
+    numberOfRainDrops = 50;
+     //Snow 
+    numberOfSnowFlakes = 50;
+  }
+
 
   //ID 800- 804
   //----------------------------------------------------------------------------------------------------------//
@@ -805,49 +871,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
      cloudImg = cloudImage;
   }
 
-  //ID 500- 531
-  //----------------------------------------------------------------------------------------------------------//
-  // 500 - Light Rain
-  if (weatherId === 500) {
-    //Clouds
-    xSpeedByWindSpeed = 1 * windDirection;
-    numberOfClouds = 50;
-    cloudSizeMuliply = 5;
-    setCloudBrightness = 50;
-     //Clouds
-     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
-     cloudImg = cloudImage;
-     //Rain 
-    numberOfRainDrops = 100;
-  }
-
-  // 501 - Moderate Rain
-  if (weatherId === 501) {
-    //Clouds
-    xSpeedByWindSpeed = 1 * windDirection;
-    numberOfClouds = 50;
-    cloudSizeMuliply = 5;
-    setCloudBrightness = 50;
-     //Clouds
-     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
-     cloudImg = cloudImage;
-     //Rain 
-    numberOfRainDrops = 200;
-  }
-
-   // 502 - heavy intensity rain
-   if (weatherId === 501) {
-    //Clouds
-    xSpeedByWindSpeed = 1 * windDirection;
-    numberOfClouds = 50;
-    cloudSizeMuliply = 5;
-    setCloudBrightness = 50;
-     //Clouds
-     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
-     cloudImg = cloudImage;
-     //Rain 
-    numberOfRainDrops = 300;
-  }
+ 
 
 
   // CLOUDS FUNCTIONS
@@ -962,7 +986,7 @@ let cloudAlpha;
   
   
   
-  rainCtx.globalAlpha = 0.2
+  rainCtx.globalAlpha = 1
   
   class Particle {
     constructor(x, y) {
@@ -1003,6 +1027,67 @@ let cloudAlpha;
   init();
 //RAIN END  
 
+
+
+
+//SNOW
+  //----------------------------------------------------------------------------------------------------------//
+  let snowParticlesArray = [];
+  const numberOfSnowParticles = numberOfSnowFlakes;
+  
+
+  let snowImage = new Image();
+  if(isMorning === true){
+    snowImage.src = "PlaceHolderImagesv1/snowflakes.png"
+  }
+  if(isDay === true){
+    snowImage.src = "PlaceHolderImagesv1/snowflakes.png"
+  }
+  if(isNight === true){
+    snowImage.src = "PlaceHolderImagesv1/snowflakes.png"
+  }
+  
+    
+  class SnowParticle {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.size = Math.random() * 8 + 2;
+      this.weight = Math.random() * 0.1 + 0.15;
+      this.directionX = Math.random() *  xSpeedByWindSpeed * 2; // insert wind direction
+      this.r =  Math.random() * 255
+      this.g = Math.random() * 255
+      this.b = Math.random() * 255
+  
+    }
+    updateSnow() {
+      if (this.y > rainCanvas.height) {
+        this.y = 0 - this.size -50;
+        this.weight = Math.random() * 0.1 + 0.15;
+        this.x = Math.random() * rainCanvas.width * 1.3;
+      }
+      this.weight += 0.004;
+      this.y += this.weight;
+      this.x += this.directionX;
+  
+    }
+    drawSnow() {
+      rainCtx.drawImage(snowImage, this.x, this.y, this.size, this.size*2)
+    }
+  }
+  
+  function initSnow() {
+    for (let i = 0; i < numberOfSnowParticles; i++) {
+        const x = Math.random() * rainCanvas.width;
+        const y = Math.random() * rainCanvas.height;
+        snowParticlesArray.push(new SnowParticle(x ,y))
+    }
+  }
+  
+  initSnow();
+//SNOW END  
+
+
   //----------------------------------------------------------------------------------------------------------//
   //SETUP
   //----------------------------------------------------------------------------------------------------------//
@@ -1031,11 +1116,16 @@ let cloudAlpha;
     cityBlackDraw();
 
      // RUN RAIN
-   
      for(let i = 0; i < particlesArray.length; i++){
       particlesArray[i].update();
       particlesArray[i].draw();
-  }
+    }
+     // RUN SNOW
+     for(let i = 0; i < snowParticlesArray.length; i++){
+      snowParticlesArray[i].updateSnow();
+      snowParticlesArray[i].drawSnow();
+     }
+ 
     requestAnimationFrame(update);
   })();
 } // LAST LINE SET FORECAST TRUE OR FALSE
