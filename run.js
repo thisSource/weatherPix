@@ -33,8 +33,8 @@ if (window.innerWidth > 601) {
   optWidth = 1366;
   optHeight = 768;
 } else {
-  optWidth = 360;
-  optHeight = 640;
+  optWidth = 560;
+  optHeight = 750;
 }
 
 (function setResponsiveSize() {
@@ -333,7 +333,7 @@ console.log("Is Night? " + isNight)
 
   if (locationInput === "Stockholm") {
     if (currentMonth <= 3) {
-      cityImage.src = "PlaceHolderImagesv1/cityStockholmWinter.png";
+      cityImage.src = "Images/Locations/Stockholm/StockholmCityWinterDay.png";
     }
     if (currentMonth > 3 && currentMonth < 9) {
       cityImage.src = "PlaceHolderImagesv1/cityStockholm.png";
@@ -345,7 +345,7 @@ console.log("Is Night? " + isNight)
       cityImage.src = "PlaceHolderImagesv1/cityStockholmWinter.png";
     }
 
-    cityBlackImage.src = "PlaceHolderImagesv1/cityStockholmBlack.png";
+    cityBlackImage.src = "Images/Locations/Stockholm/StockholmCityBlack.png";
     // windows.src = "PlaceHolderImagesv1/windows.png";
   }
 
@@ -590,9 +590,9 @@ console.log("Is Night? " + isNight)
       cityImage.naturalWidth * croptWidthEnd,
       cityImage.naturalHeight,
       0,
-      cityHeight - 550 * relHeight,
+      cityHeight - 650 * relHeight,
       cityWidth,
-      cityHeight - 100 * relHeight
+      cityHeight - 110 * relHeight
     );
   }
 
@@ -643,7 +643,7 @@ console.log("Is Night? " + isNight)
   }
 
   //----------------------------------------------------------------------------------------------------------//
-  // WEATHER FUNCTIONS
+  // WEATHER APPLICATION SECTION 
   //----------------------------------------------------------------------------------------------------------//
 
   // SET IF TO DISPLAY CURRENT WEATHER OR FORCAST
@@ -884,8 +884,6 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
      cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
      cloudImg = cloudImage;
   }
-
- 
 
 
   // CLOUDS FUNCTIONS
@@ -1135,7 +1133,8 @@ let cloudAlpha;
       particlesArray[i].draw();
     }
      // RUN SNOW
-     for(let i = 0; i < snowParticlesArray.length; i++){
+     for(let i = 0; i <
+       snowParticlesArray.length; i++){
       snowParticlesArray[i].updateSnow();
       snowParticlesArray[i].drawSnow();
      }
