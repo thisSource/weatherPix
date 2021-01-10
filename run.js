@@ -279,7 +279,7 @@ const currentTimeData =
 
 
   let currentTimeInMinutes = Number(currentHour) * 60 + Number(currentMinutes);
-  // let currentTimeInMinutes = 600;
+  // let currentTimeInMinutes = 1400
 
   console.log(
     "current year " + currentYear,
@@ -370,11 +370,11 @@ console.log("Is Night? " + isNight)
 
   //Load sky
   const skyImage = new Image();
-  skyImage.src = "PlaceHolderImagesv1/sky.png";
+  skyImage.src = "Images/Sky/skyWinter.png";
 
   // Load Sun and Moon
   const sunA = new Image();
-  sunA.src = "PlaceHolderImagesv1/sun.png";
+  sunA.src = "Images/SunAndMoon/sunStorm.png";
   //----------------------------------------------------------------------------------------------------------//
   // WEATHER, DAY AND NIGHT CYCLE, SKY, SEASON IMPLEMENTATION SECTION
   //----------------------------------------------------------------------------------------------------------//
@@ -556,7 +556,7 @@ console.log("Is Night? " + isNight)
         currentTimeInMinutes,
         currentSunRiseTimeInMinutes,
         719,
-        0.8,
+        0.3,
         0
       );
     }
@@ -566,12 +566,11 @@ console.log("Is Night? " + isNight)
         719,
         currentSunSetTimeInMinutes,
         0,
-        0.8
+        0.3
       );
     }
 
     // MAINPULATE SKY COLOR
-  
     skyCtx.fillStyle = "rgb(0,0,0,"+ skyBrightness +")"
     skyCtx.fillRect(0,0,window.innerWidth, window.innerHeight)
     skyCtx.fill()
@@ -607,7 +606,7 @@ console.log("Is Night? " + isNight)
         currentTimeInMinutes,
         0,
         currentSunRiseTimeInMinutes,
-        1,
+        0.8,
         0 
       );
     }
@@ -622,7 +621,7 @@ console.log("Is Night? " + isNight)
         currentSunSetTimeInMinutes,
         1440,
         0,
-        1
+        0.8
       );
     }
 
@@ -636,9 +635,9 @@ console.log("Is Night? " + isNight)
       cityBlackImage.naturalWidth * croptWidthEnd,
       cityBlackImage.naturalHeight,
       0,
-      cityBlackHeight - 550 * relHeight,
+      cityBlackHeight - 650 * relHeight,
       cityBlackWidth,
-      cityBlackHeight - 100 * relHeight
+      cityBlackHeight - 110 * relHeight
     );
   }
 
@@ -757,7 +756,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
     cloudSizeMuliply = 5;
     setCloudBrightness = 50;
      //Clouds
-     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImage.src = "Images/Clouds/stormcloudBright1.png";
      cloudImg = cloudImage;
      //Rain 
     numberOfRainDrops = 100;
@@ -771,7 +770,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
     cloudSizeMuliply = 5;
     setCloudBrightness = 50;
      //Clouds
-     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImage.src = "Images/Clouds/stormcloudBright1.png";
      cloudImg = cloudImage;
      //Rain 
     numberOfRainDrops = 200;
@@ -785,7 +784,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
     cloudSizeMuliply = 5;
     setCloudBrightness = 50;
      //Clouds
-     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImage.src = "Images/Clouds/stormcloudBright1.png";
      cloudImg = cloudImage;
      //Rain 
     numberOfRainDrops = 300;
@@ -801,11 +800,25 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
     cloudSizeMuliply = 5;
     setCloudBrightness = 50;
      //Clouds
-     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImage.src = "Images/Clouds/stormcloudBright1.png";
      cloudImg = cloudImage;
      //Snow 
     numberOfSnowFlakes = 50;
   }
+
+     // 601 - Snow
+     if (weatherId === 601) {
+      //Clouds
+      xSpeedByWindSpeed = xSpeedByWindSpeed * windDirection;
+      numberOfClouds = 50;
+      cloudSizeMuliply = 3;
+      setCloudBrightness = 10;
+       //Clouds
+       cloudImage.src = "Images/Clouds/stormcloudBright1.png";
+       cloudImg = cloudImage;
+       //Snow 
+      numberOfSnowFlakes = 200;
+    }
 
    // 615 Light Snow and Rain
    if (weatherId === 615) {
@@ -815,7 +828,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
     cloudSizeMuliply = 5;
     setCloudBrightness = 50;
      //Clouds
-     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImage.src = "Images/Clouds/stormcloudBright1.png";
      cloudImg = cloudImage;
      //Rain 
     numberOfRainDrops = 50;
@@ -835,7 +848,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
     cloudSizeMuliply = 2.5;
     setCloudBrightness = 0;
     //Clouds
-    cloudImage.src = "PlaceHolderImagesv1/cloud.png";
+    cloudImage.src = "Images/Clouds/cloudWhite1.png";
    cloudImg = cloudImage;
   }
 
@@ -847,7 +860,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
     cloudSizeMuliply = 2.5;
     setCloudBrightness = 0;
     //Clouds
-    cloudImage.src = "PlaceHolderImagesv1/cloud.png";
+    cloudImage.src = "Images/Clouds/cloudWhite1.png";
    cloudImg = cloudImage;
   }
   // 802
@@ -858,7 +871,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
     cloudSizeMuliply = 2.5;
     setCloudBrightness = 15;
     //Clouds
-    cloudImage.src = "PlaceHolderImagesv1/cloud.png";
+    cloudImage.src = "Images/Clouds/cloudWhite1.png";
    cloudImg = cloudImage;
   }
    // 803
@@ -869,7 +882,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
     cloudSizeMuliply = 3.5;
     setCloudBrightness = 25;
     //Clouds
-    cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+    cloudImage.src = "Images/Clouds/cloudWhite1.png";
    cloudImg = cloudImage;
   }
   // 804
@@ -881,7 +894,7 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
     cloudSizeMuliply = 5;
     setCloudBrightness = 50;
      //Clouds
-     cloudImage.src = "PlaceHolderImagesv1/cloudDark.png";
+     cloudImage.src = "Images/Clouds/stormcloudBright1.png";
      cloudImg = cloudImage;
   }
 
@@ -920,9 +933,9 @@ forcastSelector.addEventListener("change", setForecastorCurrent)
   //Clouds initialize/setup
   for (let i = 0; i < numberOfClouds; i++) {
     let xPos = randomInt(0 - 1000, window.innerWidth + 1000);
-    let yPos = randomInt(-50, 200);
-    let width = randomInt(100, 200);
-    let height = randomInt(50, 100);
+    let yPos = randomInt(100, 300);
+    let width = randomInt(150, 200);
+    let height = randomInt(50, 150);
     clouds[i] = new CloudObject(
       cloudImg,
       xPos * relWidth,
@@ -943,12 +956,12 @@ let cloudAlpha;
       0,
       currentSunRiseTimeInMinutes,
       0,
-      1 
+      0.5 
     );
   }
 
   if (currentTimeInMinutes > currentSunRiseTimeInMinutes && currentTimeInMinutes < currentSunSetTimeInMinutes ) {
-    cloudAlpha = 1
+    cloudAlpha = 0.5
   }
 
   if (currentTimeInMinutes > currentSunSetTimeInMinutes) {
@@ -956,7 +969,7 @@ let cloudAlpha;
       currentTimeInMinutes,
       currentSunSetTimeInMinutes,
       1440,
-      1,
+      0.5,
       0
     );
   }
